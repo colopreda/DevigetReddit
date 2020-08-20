@@ -18,7 +18,7 @@ class HomeViewModel(private val apiHelper: ApiHelper) : ViewModel() {
         fetchPosts()
     }
 
-    private fun fetchPosts() {
+    public fun fetchPosts() {
         viewModelScope.launch {
             posts.postValue(Resource.loading(null))
             try {

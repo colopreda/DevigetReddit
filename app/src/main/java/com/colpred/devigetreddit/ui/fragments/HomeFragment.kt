@@ -50,6 +50,7 @@ class HomeFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.let { posts -> renderList(posts) }
+                    swipetorefresh.isRefreshing = false
                 }
                 Status.LOADING -> {
 
@@ -57,6 +58,7 @@ class HomeFragment : Fragment() {
                 Status.ERROR -> {
                     //Handle Error
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+                    swipetorefresh.isRefreshing = false
                 }
             }
         })
@@ -77,6 +79,11 @@ class HomeFragment : Fragment() {
             )
         )
         recycler_view.adapter = adapter
+        swipetorefresh.setOnRefreshListener {
+            adapter.items.clear()
+            adapter.notifyDataSetChanged()
+            viewModel.fetchPosts()
+        }
     }
 
     private fun setUpViewModel() {
