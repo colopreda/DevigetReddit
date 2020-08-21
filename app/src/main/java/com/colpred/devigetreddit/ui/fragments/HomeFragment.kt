@@ -1,5 +1,6 @@
 package com.colpred.devigetreddit.ui.fragments
 
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.colpred.devigetreddit.model.Post
 import com.colpred.devigetreddit.model.RedditJsonResponse
 import com.colpred.devigetreddit.network.ApiHelperImpl
 import com.colpred.devigetreddit.network.RetrofitBuilder
+import com.colpred.devigetreddit.ui.DetailActivity
 import com.colpred.devigetreddit.utils.Status
 import com.colpred.devigetreddit.viewmodel.HomeViewModel
 import com.github.stephenvinouze.advancedrecyclerview.pagination.extensions.enablePagination
@@ -72,7 +74,11 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
                 }
             }
         } else {
-            // TODO intent
+            val intent = Intent().apply {
+                setClass(requireContext(), DetailActivity::class.java)
+                putExtra("post", curPost)
+            }
+            startActivity(intent)
         }
     }
 
