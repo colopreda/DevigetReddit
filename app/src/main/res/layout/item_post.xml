@@ -97,7 +97,7 @@
         app:constraint_referenced_ids="thumbnail,title" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/comments_ico"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -108,14 +108,26 @@
         app:layout_constraintTop_toBottomOf="@+id/barrier"
         app:srcCompat="@drawable/ic_baseline_message" />
 
+    <ImageView
+        android:id="@+id/delete_ico"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barrier"
+        app:srcCompat="@drawable/ic_baseline_delete" />
+
     <TextView
         android:id="@+id/comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textColor="#818181"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/comments_ico"
+        app:layout_constraintStart_toEndOf="@+id/comments_ico"
+        app:layout_constraintTop_toTopOf="@+id/comments_ico"
         tools:text="2314" />
 </androidx.constraintlayout.widget.ConstraintLayout>
