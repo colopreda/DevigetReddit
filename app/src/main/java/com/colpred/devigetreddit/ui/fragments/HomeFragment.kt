@@ -7,13 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.colpred.devigetreddit.R
 import com.colpred.devigetreddit.adapters.HomeAdapter
+import com.colpred.devigetreddit.model.Post
 import com.colpred.devigetreddit.model.RedditJsonResponse
 import com.colpred.devigetreddit.network.ApiHelperImpl
 import com.colpred.devigetreddit.network.RetrofitBuilder
@@ -22,7 +25,7 @@ import com.colpred.devigetreddit.viewmodel.HomeViewModel
 import com.github.stephenvinouze.advancedrecyclerview.pagination.extensions.enablePagination
 import kotlinx.android.synthetic.main.home_fragment.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: HomeAdapter
@@ -85,7 +88,7 @@ class HomeFragment : Fragment() {
                 viewModel.loadMorePosts()
             }
         )
-        adapter = HomeAdapter()
+        adapter = HomeAdapter(this)
         recycler_view.addItemDecoration(
             DividerItemDecoration(
                 recycler_view.context,
@@ -105,6 +108,13 @@ class HomeFragment : Fragment() {
             this,
             viewModelFactory { HomeViewModel(ApiHelperImpl(RetrofitBuilder.apiService)) }
         ).get(HomeViewModel::class.java)
+    }
+
+    override fun onClickedPost(post: Post) {
+        findNavController().navigate(
+            R.id.action_charactersFragment_to_characterDetailFragment,
+            bundleOf("post" to post)
+        )
     }
 
 

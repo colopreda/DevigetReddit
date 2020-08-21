@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
 data class Post(
     @NonNull
     @PrimaryKey(autoGenerate = false) var id: String,
-    @SerializedName("author_fullname") var author: String?,
+    var author: String?,
     @SerializedName("subreddit_name_prefixed") var subreddit: String?,
     var title: String?,
     var clicked: Boolean = false,

@@ -16,7 +16,10 @@ class PostItemView @JvmOverloads constructor(context: Context, attributeSet: Att
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
     }
 
-    fun bind (post: Post) {
+    fun bind (post: Post, onClickListener: (Post) -> Unit) {
+        setOnClickListener {
+            onClickListener(post)
+        }
         title.text = post.title
         subreddit.text = post.subreddit
         posted_by.text = "Posted by ${post.author}"

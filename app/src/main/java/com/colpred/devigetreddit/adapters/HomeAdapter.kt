@@ -8,10 +8,17 @@ import com.colpred.devigetreddit.model.Post
 import com.colpred.devigetreddit.ui.PostItemView
 import com.github.stephenvinouze.advancedrecyclerview.pagination.adapters.RecyclerPaginationAdapter
 
-class HomeAdapter : RecyclerPaginationAdapter<Post>() {
+class HomeAdapter(private val listener: PostItemListener) : RecyclerPaginationAdapter<Post>() {
+
+    interface PostItemListener {
+        fun onClickedPost(post: Post)
+    }
+
     override fun onBindItemView(view: View, position: Int) {
         when (view) {
-            is PostItemView -> view.bind(items[position])
+            is PostItemView -> view.bind(items[position]){
+                listener.onClickedPost(it)
+            }
         }
     }
 

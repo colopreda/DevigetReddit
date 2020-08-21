@@ -10,6 +10,14 @@
         android:name="com.colpred.devigetreddit.ui.fragments.HomeFragment"
         android:label="Home"
         tools:layout="@layout/home_fragment" >
+        <action
+            android:id="@+id/action_charactersFragment_to_characterDetailFragment"
+            app:destination="@id/postDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/postDetailFragment"
+        android:name="com.colpred.devigetreddit.ui.fragments.DetailFragment"
+        android:label="Post"
+        tools:layout="@layout/fragment_detail" />
 
 </navigation>
