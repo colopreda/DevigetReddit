@@ -1,12 +1,14 @@
 package com.colpred.devigetreddit.adapters
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.colpred.devigetreddit.R
 import com.colpred.devigetreddit.model.Post
 import com.colpred.devigetreddit.ui.PostItemView
-import com.github.stephenvinouze.advancedrecyclerview.core.adapters.RecyclerAdapter
+import com.github.stephenvinouze.advancedrecyclerview.pagination.adapters.RecyclerPaginationAdapter
 
-class HomeAdapter : RecyclerAdapter<Post>() {
+class HomeAdapter : RecyclerPaginationAdapter<Post>() {
     override fun onBindItemView(view: View, position: Int) {
         when (view) {
             is PostItemView -> view.bind(items[position])
@@ -14,5 +16,8 @@ class HomeAdapter : RecyclerAdapter<Post>() {
     }
 
     override fun onCreateItemView(parent: ViewGroup, viewType: Int): View = PostItemView(parent.context)
+
+    override fun onCreateLoaderView(parent: ViewGroup, viewType: Int): View =
+        LayoutInflater.from(parent.context).inflate(R.layout.view_progress, parent, false)
 
 }

@@ -19,6 +19,7 @@ import com.colpred.devigetreddit.network.ApiHelperImpl
 import com.colpred.devigetreddit.network.RetrofitBuilder
 import com.colpred.devigetreddit.utils.Status
 import com.colpred.devigetreddit.viewmodel.HomeViewModel
+import com.github.stephenvinouze.advancedrecyclerview.pagination.extensions.enablePagination
 import kotlinx.android.synthetic.main.home_fragment.*
 
 class HomeFragment : Fragment() {
@@ -51,6 +52,7 @@ class HomeFragment : Fragment() {
                 Status.SUCCESS -> {
                     it.data?.let { posts -> renderList(posts) }
                     swipetorefresh.isRefreshing = false
+                    adapter.isLoading = false
                 }
                 Status.LOADING -> {
 
@@ -65,12 +67,24 @@ class HomeFragment : Fragment() {
     }
 
     private fun renderList(posts: RedditJsonResponse) {
-        adapter.items = posts.data.children.map { it.data }.toMutableList()
+        adapter.items.addAll(posts.data.children.map { it.data }.toMutableList())
         adapter.notifyDataSetChanged()
     }
 
     private fun setUpUI() {
         recycler_view.layoutManager = LinearLayoutManager(context)
+        recycler_view.enablePagination(
+            isLoading = {
+                adapter.isLoading
+            },
+            hasAllItems = {
+                !viewModel.hasMoreItems()
+            },
+            onLoad = {
+                adapter.isLoading = true
+                viewModel.loadMorePosts()
+            }
+        )
         adapter = HomeAdapter()
         recycler_view.addItemDecoration(
             DividerItemDecoration(
