@@ -23,6 +23,7 @@ class PostItemView @JvmOverloads constructor(context: Context, attributeSet: Att
         title.text = post.title
         subreddit.text = post.subreddit
         posted_by.text = "Posted by ${post.author}"
+        comments.text = post.numComments.toString()
         //posted_by.text = "Posted by ${post.author} - ${getTimeAgo(post.created)}"
 
         Glide.with(context)
