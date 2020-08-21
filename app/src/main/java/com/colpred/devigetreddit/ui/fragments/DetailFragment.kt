@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_detail.*
 private const val POST = "post"
 
 class DetailFragment : Fragment() {
-    private var post: Post? = null
+    var post: Post? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

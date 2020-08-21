@@ -1,5 +1,6 @@
 package com.colpred.devigetreddit.ui.fragments
 
+import android.content.res.Configuration
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -23,12 +24,16 @@ import com.colpred.devigetreddit.network.RetrofitBuilder
 import com.colpred.devigetreddit.utils.Status
 import com.colpred.devigetreddit.viewmodel.HomeViewModel
 import com.github.stephenvinouze.advancedrecyclerview.pagination.extensions.enablePagination
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.home_fragment.*
 
 class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var adapter: HomeAdapter
+
+    private var dualPane: Boolean = false
+    private lateinit var currentPost: Post
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +44,36 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        checkLandscape(savedInstanceState)
         setUpViewModel()
         setUpUI()
         setUpObservables()
+    }
+
+    private fun checkLandscape(savedInstanceState: Bundle?) {
+        dualPane = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+        currentPost = savedInstanceState?.getParcelable("curPost") ?: Post()
+        if (dualPane) {
+            showPost(currentPost)
+        }
+    }
+
+    private fun showPost(curPost: Post) {
+        currentPost = curPost
+        if (dualPane) {
+            var postFragment = childFragmentManager.findFragmentById(R.id.action_charactersFragment_to_characterDetailFragment) as? DetailFragment
+            if (postFragment?.post?.id != curPost.id) {
+                postFragment = DetailFragment.newInstance(curPost)
+
+                parentFragmentManager.beginTransaction().apply {
+                    replace(R.id.detail, postFragment)
+                    commit()
+                }
+            }
+        } else {
+            // TODO intent
+        }
     }
 
     protected inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
@@ -72,6 +104,11 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
     private fun renderList(posts: RedditJsonResponse) {
         adapter.items.addAll(posts.data.children.map { it.data }.toMutableList())
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable("curPost", currentPost)
     }
 
     private fun setUpUI() {
@@ -111,10 +148,7 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
     }
 
     override fun onClickedPost(post: Post) {
-        findNavController().navigate(
-            R.id.action_charactersFragment_to_characterDetailFragment,
-            bundleOf("post" to post)
-        )
+        showPost(post)
     }
 
 
