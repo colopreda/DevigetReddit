@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.colpred.devigetreddit.R
 import com.colpred.devigetreddit.ui.fragments.DetailFragment
+import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {
 
@@ -27,5 +28,10 @@ class DetailActivity : AppCompatActivity() {
                 .add(R.id.detail, details)
                 .commit()
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return false
     }
 }

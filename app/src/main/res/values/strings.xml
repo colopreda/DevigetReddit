@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">DevigetReddit</string>
-    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_detail">Post</string>
+    <string name="title_activity_main">Home</string>
 </resources>

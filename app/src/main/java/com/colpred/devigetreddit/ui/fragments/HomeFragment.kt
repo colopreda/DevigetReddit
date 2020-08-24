@@ -18,6 +18,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.colpred.devigetreddit.R
 import com.colpred.devigetreddit.adapters.HomeAdapter
+import com.colpred.devigetreddit.db.AppDatabase
+import com.colpred.devigetreddit.db.DatabaseBuilder
+import com.colpred.devigetreddit.db.DatabaseHelperImpl
+import com.colpred.devigetreddit.model.ChildrenData
 import com.colpred.devigetreddit.model.Post
 import com.colpred.devigetreddit.model.RedditJsonResponse
 import com.colpred.devigetreddit.network.ApiHelperImpl
@@ -35,6 +39,7 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
     private lateinit var adapter: HomeAdapter
 
     private var dualPane: Boolean = false
+    private var shouldLoad: Boolean = true
     private lateinit var currentPost: Post
 
     override fun onCreateView(
@@ -46,8 +51,8 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        checkLandscape(savedInstanceState)
         setUpViewModel()
+        checkLandscape(savedInstanceState)
         setUpUI()
         setUpObservables()
     }
@@ -63,6 +68,7 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
 
     private fun showPost(curPost: Post) {
         currentPost = curPost
+        viewModel.markAsRead(curPost.id)
         if (dualPane) {
             var postFragment = childFragmentManager.findFragmentById(R.id.action_charactersFragment_to_characterDetailFragment) as? DetailFragment
             if (postFragment?.post?.id != curPost.id) {
@@ -94,6 +100,7 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
                     it.data?.let { posts -> renderList(posts) }
                     swipetorefresh.isRefreshing = false
                     adapter.isLoading = false
+                    recycler_view.smoothScrollToPosition(0)
                 }
                 Status.LOADING -> {
 
@@ -107,8 +114,8 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
         })
     }
 
-    private fun renderList(posts: RedditJsonResponse) {
-        adapter.items.addAll(posts.data.children.map { it.data }.toMutableList())
+    private fun renderList(posts: MutableList<ChildrenData>) {
+        adapter.items = posts.map { it.data }.toMutableList()
         adapter.notifyDataSetChanged()
     }
 
@@ -124,7 +131,7 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
                 adapter.isLoading
             },
             hasAllItems = {
-                !viewModel.hasMoreItems()
+                !viewModel.hasMoreItems() || !shouldLoad
             },
             onLoad = {
                 adapter.isLoading = true
@@ -142,19 +149,32 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
         swipetorefresh.setOnRefreshListener {
             adapter.items.clear()
             adapter.notifyDataSetChanged()
+            shouldLoad = true
             viewModel.fetchPosts()
+        }
+        fab.setOnClickListener {
+            shouldLoad = false
+            viewModel.deleteAllPosts()
         }
     }
 
     private fun setUpViewModel() {
         viewModel = ViewModelProviders.of(
             this,
-            viewModelFactory { HomeViewModel(ApiHelperImpl(RetrofitBuilder.apiService)) }
+            viewModelFactory { HomeViewModel(
+                ApiHelperImpl(RetrofitBuilder.apiService),
+                DatabaseHelperImpl(DatabaseBuilder.getInstance(requireContext()))
+            )}
         ).get(HomeViewModel::class.java)
     }
 
     override fun onClickedPost(post: Post) {
         showPost(post)
+    }
+
+    override fun onDeleteClicked(post: Post, position: Int) {
+        adapter.removeItem(position)
+        viewModel.deletePost(post.id)
     }
 
 

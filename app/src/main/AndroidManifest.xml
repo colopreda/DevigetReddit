@@ -15,9 +15,11 @@
 
         <activity
             android:name=".ui.DetailActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:label="@string/title_activity_detail">
         </activity>
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

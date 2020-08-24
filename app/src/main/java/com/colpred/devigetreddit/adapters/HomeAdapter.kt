@@ -12,13 +12,12 @@ class HomeAdapter(private val listener: PostItemListener) : RecyclerPaginationAd
 
     interface PostItemListener {
         fun onClickedPost(post: Post)
+        fun onDeleteClicked(post: Post, position: Int)
     }
 
     override fun onBindItemView(view: View, position: Int) {
         when (view) {
-            is PostItemView -> view.bind(items[position]){
-                listener.onClickedPost(it)
-            }
+            is PostItemView -> view.bind(items[position], listener, position)
         }
     }
 
