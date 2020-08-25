@@ -101,12 +101,20 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
                     swipetorefresh.isRefreshing = false
                     adapter.isLoading = false
                     recycler_view.smoothScrollToPosition(0)
+                    shimmer_view_container.visibility = View.GONE
+                    shimmer_view_container.stopShimmerAnimation()
+                    swipetorefresh.visibility = View.VISIBLE
                 }
                 Status.LOADING -> {
-
+                    shimmer_view_container.visibility = View.VISIBLE
+                    shimmer_view_container.startShimmerAnimation()
+                    swipetorefresh.visibility = View.GONE
                 }
                 Status.ERROR -> {
                     //Handle Error
+                    shimmer_view_container.visibility = View.GONE
+                    shimmer_view_container.stopShimmerAnimation()
+                    swipetorefresh.visibility = View.VISIBLE
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                     swipetorefresh.isRefreshing = false
                 }

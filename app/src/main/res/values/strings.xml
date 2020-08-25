@@ -2,4 +2,6 @@
     <string name="app_name">DevigetReddit</string>
     <string name="title_activity_detail">Post</string>
     <string name="title_activity_main">Home</string>
+    <string name="save_image_to_disk">Save image to disk</string>
+    <string name="no_post_selected">No post selected. Select a post to view its content</string>
 </resources>

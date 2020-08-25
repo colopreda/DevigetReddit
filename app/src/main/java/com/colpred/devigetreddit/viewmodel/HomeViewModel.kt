@@ -99,7 +99,6 @@ class HomeViewModel(private val apiHelper: ApiHelper, private val databaseHelper
 
     fun loadMorePosts() {
         viewModelScope.launch {
-            postListMutable.postValue(Resource.loading(null))
             try {
                 val morePosts = apiHelper.getNextTopPosts(lastPost)
                 val newPostList = morePosts.data.children.toMutableList()

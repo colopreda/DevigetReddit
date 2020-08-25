@@ -96,6 +96,9 @@ dependencies {
     // Image worker
     implementation 'com.github.ihimanshurawat:ImageWorker:1.0'
 
+    // Shimmer layout
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'

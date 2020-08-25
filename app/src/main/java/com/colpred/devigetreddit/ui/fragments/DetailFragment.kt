@@ -16,6 +16,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.colpred.devigetreddit.R
 import com.colpred.devigetreddit.model.Post
+import com.colpred.devigetreddit.utils.getTimeAgo
 import com.himanshurawat.imageworker.Extension
 import com.himanshurawat.imageworker.ImageWorker
 import kotlinx.android.synthetic.main.fragment_detail.*
@@ -47,25 +48,37 @@ class DetailFragment : Fragment() {
     }
 
     private fun setUpUI() {
-        title.text = post?.title
-        author.text = post?.author
-        subreddit.text = post?.subreddit
-        Glide.with(this)
-            .asBitmap()
-            .load(post?.url)
-            .centerInside()
-            .into(object : CustomTarget<Bitmap>(){
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    // Nothing to do here
-                }
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    image.setImageBitmap(resource)
-                    imageBitmap = resource
-                }
+        if (post?.id.isNullOrEmpty()) {
+            empty_state.visibility = View.VISIBLE
+            detail_layout.visibility = View.GONE
+        } else {
+            empty_state.visibility = View.GONE
+            detail_layout.visibility = View.VISIBLE
+            title.text = post?.title
+            author.text = "Posted by ${post?.author} - ${post?.created?.let { getTimeAgo(it) }}"
+            subreddit.text = post?.subreddit
+            if (post?.thumbnail == "default") {
+                save.visibility = View.GONE
+                save_ico.visibility = View.GONE
+            } else {
+                Glide.with(this)
+                    .asBitmap()
+                    .load(post?.url)
+                    .centerInside()
+                    .into(object : CustomTarget<Bitmap>(){
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                            // Nothing to do here
+                        }
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            image.setImageBitmap(resource)
+                            imageBitmap = resource
+                        }
 
-            })
-        save.setOnClickListener {
-            saveImageToExternalStorage()
+                    })
+                save.setOnClickListener {
+                    saveImageToExternalStorage()
+                }
+            }
         }
     }
 

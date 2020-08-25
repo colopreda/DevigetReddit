@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.colpred.devigetreddit.R
 import com.colpred.devigetreddit.adapters.HomeAdapter
 import com.colpred.devigetreddit.model.Post
+import com.colpred.devigetreddit.utils.getTimeAgo
 import kotlinx.android.synthetic.main.item_post.view.*
 
 class PostItemView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) : ConstraintLayout(context, attributeSet, defStyleAttr) {
@@ -24,7 +25,6 @@ class PostItemView @JvmOverloads constructor(context: Context, attributeSet: Att
         }
         title.text = post.title
         subreddit.text = post.subreddit
-        posted_by.text = "Posted by ${post.author}"
         comments.text = post.numComments.toString()
         if (post.clicked) {
             indicator.visibility = View.GONE
@@ -34,11 +34,14 @@ class PostItemView @JvmOverloads constructor(context: Context, attributeSet: Att
         delete_ico.setOnClickListener {
             onClickListener.onDeleteClicked(post, position)
         }
-        //posted_by.text = "Posted by ${post.author} - ${getTimeAgo(post.created)}"
-
-        Glide.with(context)
-            .load(post.thumbnail)
-            .centerCrop()
-            .into(thumbnail)
+        posted_by.text = "Posted by ${post.author} - ${getTimeAgo(post.created)}"
+        if (post.thumbnail == "default") {
+            thumbnail.visibility = View.GONE
+        } else {
+            Glide.with(context)
+                .load(post.thumbnail)
+                .centerCrop()
+                .into(thumbnail)
+        }
     }
 }

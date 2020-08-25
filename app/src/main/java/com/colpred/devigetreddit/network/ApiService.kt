@@ -5,9 +5,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ApiService {
-    @GET("r/all/top.json?limit=5")
+    @GET("r/all/top.json?limit=10")
     suspend fun getAllTopPosts(): RedditJsonResponse
 
-    @GET("r/all/top.json?limit=5")
+    @GET("r/all/top.json?limit=10")
     suspend fun getNextTopPosts(@Query("after") after: String): RedditJsonResponse
 }
