@@ -2,36 +2,31 @@ package com.colpred.devigetreddit.ui.fragments
 
 import android.content.Intent
 import android.content.res.Configuration
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.colpred.devigetreddit.R
 import com.colpred.devigetreddit.adapters.HomeAdapter
-import com.colpred.devigetreddit.db.AppDatabase
 import com.colpred.devigetreddit.db.DatabaseBuilder
 import com.colpred.devigetreddit.db.DatabaseHelperImpl
 import com.colpred.devigetreddit.model.ChildrenData
 import com.colpred.devigetreddit.model.Post
-import com.colpred.devigetreddit.model.RedditJsonResponse
 import com.colpred.devigetreddit.network.ApiHelperImpl
 import com.colpred.devigetreddit.network.RetrofitBuilder
 import com.colpred.devigetreddit.ui.DetailActivity
 import com.colpred.devigetreddit.utils.Status
 import com.colpred.devigetreddit.viewmodel.HomeViewModel
 import com.github.stephenvinouze.advancedrecyclerview.pagination.extensions.enablePagination
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
 
@@ -46,7 +41,7 @@ class HomeFragment : Fragment(), HomeAdapter.PostItemListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.home_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
